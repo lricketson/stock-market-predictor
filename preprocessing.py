@@ -89,6 +89,7 @@ def merge_data_dfs():
 def prep_and_split_data(train_df):
     """
     This assumes the df has already been cleaned. It returns the training df split into validation data.
+    Returns X_train, X_val, y_train, y_val.
     """
     cols_to_drop = ["Date", TARGET_COL]  # Potentially add more
     X = train_df.drop(columns=cols_to_drop)
