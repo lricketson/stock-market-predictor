@@ -1,32 +1,33 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import confusion_matrix
-
-# ONLY USED IF THIS IS A CLASSIFICATION TASK
+import pandas as pd
 
 
-def plot_model_confusion_matrix(
-    y_true, y_pred, classes, title="Confusion Matrix", save_path=None
-):
+def show_top_features(trained_model, feature_names, top_n=10):
     """
-    A universal confusion matrix plotter that works for any model.
+    Extracts and ranks the features lgbm found most useful.
     """
-    cm = confusion_matrix(y_true=y_true, y_pred=y_pred, labels=classes)
+    importance = trained_model.feature_importances_
 
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(
-        cm, annot=True, fmt="d", cmap="Blues", xticklabels=classes, yticklabels=classes
-    )
+    feature_df = pd.DataFrame(
+        {"Feature": feature_names, "Importance": importance}
+    ).sort_values(by="Importance", ascending=False)
 
-    plt.title(title, fontsize=16, pad=15)
-    plt.ylabel("True Label", fontsize=12)
-    plt.xlabel("Predicted Label", fontsize=12)
-    plt.xticks(rotation=45, ha="right")
+    print(f"\nTOP {top_n} STRONGEST FEATURES")
+    print(feature_df.head(top_n).to_string(index=False))
 
-    plt.tight_layout()
+    return feature_df
 
-    if save_path:
-        plt.savefig(save_path, dpi=300)
-        print(f"Saved matrix to {save_path}")
 
-    plt.show()
+def show_bottom_features(trained_model, feature_names, top_n=10):
+    """
+    Extracts and ranks the features lgbm found least useful.
+    """
+    importance = trained_model.feature_importances_
+
+    feature_df = pd.DataFrame(
+        {"Feature": feature_names, "Importance": importance}
+    ).sort_values(by="Importance", ascending=True)
+
+    print(f"\nTOP {top_n} WEAKEST FEATURES")
+    print(feature_df.head(top_n).to_string(index=False))
+
+    return feature_df

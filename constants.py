@@ -1,2 +1,4 @@
-TARGET_COL = "Target"
-FILENAME = "data.csv"
+TARGET_CLASS = "Sell"
+TARGET_PRICE = "p50"
+CURRENT_PRICE = "p40"
+TRAIN_FILENAME = "train.csv"
